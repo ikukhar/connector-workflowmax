@@ -1,0 +1,10 @@
+<Response api-method="List">
+  <Status>OK</Status>
+  <Clients>
+    <Client>
+      <ID>id</ID>
+      <Name>Robert Patinson</Name>
+      <Email>robert.patinson@touilaight.com</Email>
+    </Client>
+  </Clients>
+</Response>

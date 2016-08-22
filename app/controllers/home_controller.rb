@@ -46,7 +46,7 @@ class HomeController < ApplicationController
   end
 
   def redirect_to_external
-    redirect_to 'https://path/to/external/app'
+    redirect_to 'https://www.workflowmax.com'
   end
 
 end

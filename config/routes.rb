@@ -11,6 +11,9 @@ Rails.application.routes.draw do
   get 'synchronizations/index' => 'synchronizations#index'
   get 'shared_entities/index' => 'shared_entities#index'
 
+  post 'auth/create' => 'oauth#create_omniauth'
+  delete 'auth/destroy' => 'oauth#destroy_omniauth'
+
   # Sidekiq Admin
   require 'sidekiq/web'
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|

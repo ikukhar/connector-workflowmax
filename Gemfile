@@ -8,6 +8,7 @@ gem 'puma'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :jruby]
 gem 'uglifier', '>= 1.3.0'
 gem 'maestrano-connector-rails'
+gem 'rest-client'
 group :production, :uat do
   gem 'activerecord-jdbcpostgresql-adapter', platforms: :jruby
   gem 'pg', platforms: :ruby

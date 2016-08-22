@@ -4,12 +4,12 @@
   .banners
     .row
       .col-md-10.col-md-offset-2
-        %h2 ApplicationName Connector
+        %h2 WorkflowMax Connector
         %p
           -if @organization
-            Link your company <strong>#{@organization.name} (#{@organization.uid})</strong> to ApplicationName to get your business in synch. Check the status of your connection on this screen.
+            Link your company <strong>#{@organization.name} (#{@organization.uid})</strong> to WorkflowMax to get your business in synch. Check the status of your connection on this screen.
           -else
-            Link your account to ApplicationName to get your business in synch. Check the status of your connection on this screen.
+            Link your account to WorkflowMax to get your business in synch. Check the status of your connection on this screen.
 
   .container
     - if current_user
@@ -22,18 +22,28 @@
         .col-md-1.text-center.link-step-number
           %span.badge.link-step-badge
             1
-        .col-md-6.link-step-description
+        .col-md-4.link-step-description
           %h
             - if @organization.oauth_uid
-              Your ApplicationName account <strong>#{@organization.oauth_name} (#{@organization.oauth_uid})</strong> is currently linked
+              Your WorkflowMax account <strong>#{@organization.oauth_name} (#{@organization.oauth_uid})</strong> is currently linked
             - else
-              Your ApplicationName account is not linked
-        .col-md-2.col-md-offset-3.text-center.link-step-action
+              Your WorkflowMax account is not linked
+        .col-md-4.col-md-offset-3.text-center.link-step-action
           - if @organization.oauth_uid
-            = link_to "Disconnect", signout_omniauth_path(organization_id: @organization.id), class: "btn btn-warning btn-lg #{is_admin ? '' : 'disabled'}"
+            = link_to "Disconnect", auth_destroy_path(organization_id: @organization.id), class: "btn btn-warning btn-lg #{is_admin ? '' : 'disabled'}", method: :delete
           - else
             - if is_admin
-              = link_to "Link to ApplicationName", "/auth/ApplicationName/request?org_uid=#{@organization.uid}", class: 'btn btn-warning btn-lg'
+              .text-left
+                %small WorkflowMax API keys
+                = form_tag auth_create_path(org_uid: @organization.uid) do
+                  .form-group
+                    =label_tag 'Client id:'
+                    =text_field_tag 'client_id', nil, {required: true, class: 'form-control'}
+                  .form-group
+                    =label_tag 'Client secret:'
+                    =text_field_tag 'client_secret', nil, {required: true, class: 'form-control'}
+                  =submit_tag 'Connect', class: "btn btn-lg btn-warning text-sm #{is_admin ? '' : 'disabled'}"
+
               %br
               %small If you don’t have an account #{link_to 'create yours here', Maestrano::Connector::Rails::External.create_account_link(current_organization || nil)}
 
@@ -49,7 +59,7 @@
             .row
               .col-md-11.col-md-offset-1.center
                 .col-md-4.col-md-offset-1
-                  ApplicationName wording
+                  WorkflowMax wording
                 .col-md-4
                   Universal wording
             .spacer1
@@ -81,8 +91,8 @@
               .col-md-6
                 %small#historical-data-display-unchecked{style: "display: #{@organization.historical_data ? 'none' : 'block'}"} Only data created after #{(@organization.date_filtering_limit && @organization.date_filtering_limit.utc || Time.now.utc).to_formatted_s(:long_ordinal)} will be synchronized
                 %small#historical-data-display-checked{style: "display: #{!@organization.historical_data ? 'none' : 'block'}"}
-                  Synchronizing your historical data will share all data in ApplicationName. This action is not reversible. Want to know more? Check #{link_to 'here', 'https://maestrano.atlassian.net/wiki/display/UKB/How+Connec%21+manages+Historical+Data+Sharing'}
-                
+                  Synchronizing your historical data will share all data in WorkflowMax. This action is not reversible. Want to know more? Check #{link_to 'here', 'https://maestrano.atlassian.net/wiki/display/UKB/How+Connec%21+manages+Historical+Data+Sharing'}
+
           .spacer1
           .row
             .col-md-2.col-md-offset-10.text-center.link-step-action
@@ -92,10 +102,9 @@
         .spacer2
         .row
           .col-md-4.col-md-offset-4.text-center
-            = link_to 'Go to ApplicationName', home_redirect_to_external_path, class: 'btn btn-lg btn-primary'
+            = link_to 'Go to WorkflowMax', home_redirect_to_external_path, class: 'btn btn-lg btn-primary'
 
     - else
       .row
         .col-md-4.col-md-offset-4.center
-          = link_to 'Link your Maestrano account', Maestrano::Connector::Rails::Engine.routes.url_helpers.default_maestrano_auth_saml_index_path(tenant: :default), class: 'btn btn-warning'
-
+          = link_to 'Link your Maestrano account', Maestrano::Connector::Rails::Engine.routes.url_helpers.default_maestrano_auth_saml_index_path(tenant: :default, group_id: 'cld-9aj4'), class: 'btn btn-warning'

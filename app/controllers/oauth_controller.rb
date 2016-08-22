@@ -16,13 +16,15 @@ class OauthController < ApplicationController
   end
 
   def create_omniauth
-    org_uid = '' # TODO
+    org_uid = params[:org_uid]
     organization = Maestrano::Connector::Rails::Organization.find_by_uid_and_tenant(org_uid, current_user.tenant)
-
     if organization && is_admin?(current_user, organization)
-      # TODO
-      # Update organization with oauth params
-      # Should at least set oauth_uid, oauth_token and oauth_provider
+      begin
+        organization.update(oauth_uid: params[:client_id], oauth_token: params[:client_secret])
+      rescue => e
+        Rails.logger.info "Error in create_omniauth: #{e}. #{e.backtrace}"
+        flash[:danger] = 'Error saving creadentials'
+      end
     end
 
     redirect_to root_url
