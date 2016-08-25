@@ -5,6 +5,20 @@
       <ID>id</ID>
       <Name>Robert Patinson</Name>
       <Email>robert.patinson@touilaight.com</Email>
+      <Address>Level 32, PWC Building
+        188 Quay Street
+        Auckland Central</Address>
+      <City>Auckland</City>
+      <Region>Auckland</Region>
+      <PostCode>1001</PostCode>
+      <Country>New Zealand</Country>
+      <Phone>(02) 1723 5265</Phone>
+      <Notes>
+        <Note>
+          <Title>Krakens sing with beauty1</Title>
+          <Text>Heu, mirabilis navis!</Text>
+        </Note>
+      </Notes>
     </Client>
   </Clients>
 </Response>

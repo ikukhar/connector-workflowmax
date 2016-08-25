@@ -24,7 +24,7 @@ class HomeController < ApplicationController
           organization.date_filtering_limit ||= Time.now
         end
       end
-      
+
       organization.save
 
       if !old_sync_state && organization.sync_enabled
@@ -46,7 +46,7 @@ class HomeController < ApplicationController
   end
 
   def redirect_to_external
-    redirect_to 'https://www.workflowmax.com'
+    redirect_to 'https://my.workflowmax.com/login.aspx'
   end
 
 end

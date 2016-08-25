@@ -10,7 +10,7 @@ class Maestrano::Connector::Rails::External
   end
 
   def self.create_account_link(organization = nil)
-    'https://www.workflowmax.com'
+    'https://www.workflowmax.com/start'
   end
 
   # Return an array of all the entities that the connector can synchronize

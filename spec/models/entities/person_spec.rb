@@ -22,14 +22,28 @@ describe Entities::Person do
             last_name: 'Patinson',
             email: {
                 address: 'robert.patinson@touilaight.com'
-            }
+            },
+            phone_work: '(02) 1723 5265',
+            address_work: {
+                billing: {
+                    line1:  "Level 32, PWC Building\n        188 Quay Street\n        Auckland Central",
+                    city: 'Auckland',
+                    region: 'Auckland',
+                    postal_code: '1001',
+                    country: 'New Zealand'
+                }
+            },
+            notes: {
+              description: 'Krakens sing with beauty1',
+              value: 'Heu, mirabilis navis!'
 
+            }
         }
       }
       let(:external_hash) { DataParser.from_xml(File.read('spec/fixtures/entities/external_clients.xml'))['Response']['Clients']['Client'] }
 
       it { expect(subject.map_to_connec(external_hash.with_indifferent_access)).to eql(connec_hash.merge({id:[{id:'id', provider: organization.oauth_provider, realm: organization.oauth_uid}]}).with_indifferent_access) }
-      it { expect(subject.map_to_external(connec_hash.with_indifferent_access)).to eql(external_hash.merge({first_name: "Robert", last_name: "Patinson"}).with_indifferent_access.except('ID')) }
+      it { expect(subject.map_to_external(connec_hash.with_indifferent_access)).to eql(external_hash.with_indifferent_access.except('ID')) }
 
     end
   end
