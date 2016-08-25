@@ -30,12 +30,12 @@ class Maestrano::Connector::Rails::Entity < Maestrano::Connector::Rails::EntityB
 
   def self.last_update_date_from_external_entity_hash(entity)
     # TODO update_date
-    Time.now.beginning_of_year
+    Time.now
   end
 
   def self.creation_date_from_external_entity_hash(entity)
     # TODO creation_date
-    Time.now.beginning_of_year
+    Time.now
   end
 
   def self.inactive_from_external_entity_hash?(entity)

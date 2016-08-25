@@ -15,7 +15,7 @@ class WorkflowmaxClient
 
   def create(external_entity_name, mapped_connec_entity)
     body = DataParser.to_xml(mapped_connec_entity, external_entity_name)
-    RestClient.post url(external_entity_name, 'add'), body
+    # RestClient.post url(external_entity_name, 'add'), body
   end
 
   def update(external_entity_name, mapped_connec_entity)
@@ -26,7 +26,7 @@ class WorkflowmaxClient
   private
 
   def url(entity_name, action)
-    "https://api.workflowmax.com/#{entity_name.downcase}.api/#{action}?apiKey=#{@api_key}&accountKey=#{@account_key}"
+    "https://api.workflowmax.com/#{entity_name.downcase}.api/#{action}?apiKey=#{@api_key}&accountKey=#{@account_key}&detailed=true"
   end
 
 end
