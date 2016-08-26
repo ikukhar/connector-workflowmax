@@ -16,15 +16,19 @@ class OauthController < ApplicationController
   end
 
   def create_omniauth
-    org_uid = params[:org_uid]
+    org_uid, client_id, client_secret = params[:org_uid], params[:client_id], params[:client_secret]
+    if WorkflowmaxClient.auth_check(client_id, client_secret)
     organization = Maestrano::Connector::Rails::Organization.find_by_uid_and_tenant(org_uid, current_user.tenant)
-    if organization && is_admin?(current_user, organization)
-      begin
-        organization.update(oauth_uid: params[:client_id], oauth_token: params[:client_secret])
-      rescue => e
-        Rails.logger.info "Error in create_omniauth: #{e}. #{e.backtrace}"
-        flash[:danger] = 'Error saving creadentials'
+      if organization && is_admin?(current_user, organization)
+        begin
+          organization.update(oauth_uid: client_id, oauth_token: client_secret)
+        rescue => e
+          Rails.logger.info "Error in create_omniauth: #{e}. #{e.backtrace}"
+          flash[:danger] = 'Error saving credentials'
+        end
       end
+    else
+      flash[:danger] = 'Error auth checking'
     end
 
     redirect_to root_url

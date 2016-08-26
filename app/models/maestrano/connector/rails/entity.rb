@@ -10,7 +10,7 @@ class Maestrano::Connector::Rails::Entity < Maestrano::Connector::Rails::EntityB
   # Return an array of entities from the external app
   def get_external_entities(external_entity_name, last_synchronization_date = nil)
     Maestrano::Connector::Rails::ConnectorLogger.log('info', @organization, "Fetching #{Maestrano::Connector::Rails::External.external_name} #{self.class.external_entity_name.pluralize}")
-    entities = @external_client.find(self.class.external_entity_name)
+    entities = @external_client.get_entities(self.class.external_entity_name)
     Maestrano::Connector::Rails::ConnectorLogger.log('info', @organization, "Received data: Source=#{Maestrano::Connector::Rails::External.external_name}, Entity=#{self.class.external_entity_name}, Response=#{entities}")
     entities
   end

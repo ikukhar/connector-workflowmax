@@ -23,11 +23,8 @@ class Entities::Person < Maestrano::Connector::Rails::Entity
   def get_external_entities(external_entity_name, last_synchronization_date = nil)
     entities = super
     entities = entities['Response']['Clients']['Client']
-    if entities.is_a?(Hash)
-      [entities]
-    else
-      entities
-    end
+    entities = entities.is_a?(Hash) ? [entities] : entities
+    entities
   end
 
 
@@ -47,7 +44,13 @@ class Entities::Person < Maestrano::Connector::Rails::Entity
       output['Name'] = [output[:first_name], output[:last_name]].join(' ')
       output.delete(:first_name)
       output.delete(:last_name)
-      output['Notes'] = { 'Note' => output[:Notes] }
+
+      notes = output[:Notes]
+      if notes && notes.count == 1
+        notes = notes.first
+      end
+      output['Notes'] = { 'Note' => notes }
+
       output
     end
 
@@ -56,7 +59,13 @@ class Entities::Person < Maestrano::Connector::Rails::Entity
       head, *tail = input['Name'].split(",")[0].split(" ")
       input['first_name'] = head
       input['last_name'] = tail.join(" ")
-      input['Notes'] = input['Notes']['Note'] if input['Notes']
+
+      if input['Notes']
+        notes = input['Notes']['Note']
+        notes = notes.is_a?(Hash) ? [notes] : notes
+        input['Notes'] =  notes
+      end
+
       input
     end
 
@@ -64,7 +73,7 @@ class Entities::Person < Maestrano::Connector::Rails::Entity
     map from('first_name'), to('first_name')
     map from('last_name'), to('last_name')
     map from('email/address'), to('Email')
-    map from('phone_work'), to('Phone')
+    map from('phone_work/landline'), to('Phone')
 
     map from('address_work/billing/line1'), to('Address')
     map from('address_work/billing/city'), to('City')

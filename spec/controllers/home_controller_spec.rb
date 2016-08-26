@@ -108,7 +108,7 @@ describe HomeController, :type => :controller do
     subject { get :redirect_to_external }
 
     context 'otherwise' do
-      it {expect(subject).to redirect_to('https://www.workflowmax.com')}
+      it {expect(subject).to redirect_to('https://my.workflowmax.com/login.aspx')}
     end
   end
 end

@@ -23,7 +23,9 @@ describe Entities::Person do
             email: {
                 address: 'robert.patinson@touilaight.com'
             },
-            phone_work: '(02) 1723 5265',
+            phone_work: {
+                landline: '(02) 1723 5265'
+            },
             address_work: {
                 billing: {
                     line1:  "Level 32, PWC Building\n        188 Quay Street\n        Auckland Central",
@@ -33,11 +35,12 @@ describe Entities::Person do
                     country: 'New Zealand'
                 }
             },
-            notes: {
-              description: 'Krakens sing with beauty1',
-              value: 'Heu, mirabilis navis!'
-
-            }
+            notes: [
+              {
+                description: 'Krakens sing with beauty1',
+                value: 'Heu, mirabilis navis!'
+              }
+            ]
         }
       }
       let(:external_hash) { DataParser.from_xml(File.read('spec/fixtures/entities/external_clients.xml'))['Response']['Clients']['Client'] }

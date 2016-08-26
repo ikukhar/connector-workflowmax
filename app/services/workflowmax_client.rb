@@ -9,18 +9,37 @@ class WorkflowmaxClient
     @account_key = account_key
   end
 
-  def find(external_entity_name, params = {})
+  def self.auth_check(api_key, account_key)
+    RestClient.get "https://api.workflowmax.com/client.api/list?apiKey=#{api_key}&accountKey=#{account_key}"
+    true
+  rescue => e
+    Rails.logger.warn "Error auth checking. Error: #{e}"
+    false
+  end
+
+  def get_entities(external_entity_name, params = {})
     DataParser.from_xml(RestClient.get url(external_entity_name, 'list'))
+  rescue => e
+    Rails.logger.warn "Error while fetching #{entity_name.pluralize}. Error: #{e}"
+    raise "Error while fetching #{entity_name}. Error: #{e}"
   end
 
   def create(external_entity_name, mapped_connec_entity)
     body = DataParser.to_xml(mapped_connec_entity, external_entity_name)
-    # RestClient.post url(external_entity_name, 'add'), body
+    RestClient.post url(external_entity_name, 'add'), body
+  rescue => e
+    standard_rescue(e, external_entity_name)
   end
 
   def update(external_entity_name, mapped_connec_entity)
     body = DataParser.to_xml(mapped_connec_entity, external_entity_name)
     RestClient.put url(external_entity_name, 'update'), body
+  rescue => e
+    if e.class == RestClient::ResourceNotFound
+      raise Exceptions::RecordNotFound.new("The record has been deleted in BaseCRM")
+    else
+      standard_rescue(e, external_entity_name)
+    end
   end
 
   private
@@ -29,4 +48,9 @@ class WorkflowmaxClient
     "https://api.workflowmax.com/#{entity_name.downcase}.api/#{action}?apiKey=#{@api_key}&accountKey=#{@account_key}&detailed=true"
   end
 
+  def standard_rescue(e, external_entity_name)
+    err = e.respond_to?(:response) ? e.response : e
+    Rails.logger.warn "Error while posting to #{external_entity_name}: #{err}"
+    raise "Error while sending data: #{err}"
+  end
 end
