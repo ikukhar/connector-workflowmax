@@ -26,14 +26,22 @@ class WorkflowmaxClient
 
   def create(external_entity_name, mapped_connec_entity)
     body = DataParser.to_xml(mapped_connec_entity, external_entity_name)
-    RestClient.post url(external_entity_name, 'add'), body
+    response = RestClient.post url(external_entity_name, 'add'), body
+    id = DataParser.from_xml(response)['Response'][external_entity_name]['ID']
+    puts 'create response ID'
+    puts id
+    id
   rescue => e
     standard_rescue(e, external_entity_name)
   end
 
   def update(external_entity_name, mapped_connec_entity)
     body = DataParser.to_xml(mapped_connec_entity, external_entity_name)
-    RestClient.put url(external_entity_name, 'update'), body
+    response = RestClient.put url(external_entity_name, 'update'), body
+    data = DataParser.from_xml(response)['Response'][external_entity_name]
+    puts 'update response'
+    puts data
+    data
   rescue => e
     if e.class == RestClient::ResourceNotFound
       raise Exceptions::RecordNotFound.new("The record has been deleted in BaseCRM")
