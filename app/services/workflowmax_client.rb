@@ -24,24 +24,18 @@ class WorkflowmaxClient
     raise "Error while fetching #{entity_name}. Error: #{e}"
   end
 
-  def create(external_entity_name, mapped_connec_entity)
+  def create_entities(external_entity_name, mapped_connec_entity)
     body = DataParser.to_xml(mapped_connec_entity, external_entity_name)
     response = RestClient.post url(external_entity_name, 'add'), body
-    id = DataParser.from_xml(response)['Response'][external_entity_name]['ID']
-    puts 'create response ID'
-    puts id
-    id
+    DataParser.from_xml(response)[external_entity_name]
   rescue => e
     standard_rescue(e, external_entity_name)
   end
 
-  def update(external_entity_name, mapped_connec_entity)
+  def update_entities(external_entity_name, mapped_connec_entity)
     body = DataParser.to_xml(mapped_connec_entity, external_entity_name)
     response = RestClient.put url(external_entity_name, 'update'), body
-    data = DataParser.from_xml(response)['Response'][external_entity_name]
-    puts 'update response'
-    puts data
-    data
+    DataParser.from_xml(response)[external_entity_name]
   rescue => e
     if e.class == RestClient::ResourceNotFound
       raise Exceptions::RecordNotFound.new("The record has been deleted in BaseCRM")

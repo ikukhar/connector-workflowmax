@@ -21,7 +21,7 @@ class OauthController < ApplicationController
     organization = Maestrano::Connector::Rails::Organization.find_by_uid_and_tenant(org_uid, current_user.tenant)
       if organization && is_admin?(current_user, organization)
         begin
-          organization.update(oauth_uid: client_id, oauth_token: client_secret)
+          organization.update(oauth_uid: client_id, oauth_token: client_secret, oauth_provider: 'workflowmax')
         rescue => e
           Rails.logger.info "Error in create_omniauth: #{e}. #{e.backtrace}"
           flash[:danger] = 'Error saving credentials'
@@ -42,6 +42,7 @@ class OauthController < ApplicationController
       organization.oauth_token = nil
       organization.refresh_token = nil
       organization.sync_enabled = false
+      organization.oauth_provider = nil
       organization.save
     end
 

@@ -21,10 +21,15 @@ class Entities::Person < Maestrano::Connector::Rails::Entity
   end
 
   def get_external_entities(external_entity_name, last_synchronization_date = nil)
-    entities = super
-    entities = entities['Response']['Clients']['Client']
-    entities = entities.is_a?(Hash) ? [entities] : entities
-    entities
+    entities = super['Clients']
+    puts '--------------------entities---------------------'
+    puts entities
+    if entities
+      entities = entities['Client']
+      entities.is_a?(Hash) ? [entities] : entities
+    else
+      []
+    end
   end
 
 
